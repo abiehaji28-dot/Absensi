@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Absensi PPNPN IMIMOF</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #f2f2f2;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+h1 {
+    text-align: center;
+    font-size: 23px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+input,
+select,
+textarea,
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+button {
+    margin-top: 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+
+button:disabled {
+    background: #888;
+}
+
+.btn-pulang {
+    background: #28a745;
+}
+
+.btn-logout {
+    background: #dc3545;
+}
+
+.pesan {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.tanggal {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
+.jam {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.lokasi {
+    word-break: break-all;
+}
+
+#halamanAbsensi {
+    display: none;
+}
+
+#keteranganBox {
+    display: none;
+}
+
+#fotoBox {
+    display: none;
+}
+
+#hasilBox {
+    display: none;
+}
+
+#jamMasukBox {
+    display: none;
+}
+
+#pulangBox {
+    display: none;
+}
+
+#jamPulangBox {
+    display: none;
+}
+
+#fotoHasilBox {
+    display: none;
+}
+
+#previewFoto {
+    display: none;
+    width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+    margin-top: 15px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+}
+
+#fotoHasil {
+    width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+#modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+#fotoBesar {
+    max-width: 100%;
+    max-height: 90%;
+}
+
+#tutup {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: white;
+    font-size: 40px;
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+<!-- =========================
+LOGIN
+========================= -->
+
+<div class="card" id="halamanLogin">
+
+<h1>LOGIN</h1>
+
+<label>Username</label>
+
+<input
+type="text"
+id="username"
+placeholder="Masukkan username">
+
+
+<label>Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Masukkan password">
+
+
+<button onclick="login()">
+LOGIN
+</button>
+
+<div
+class="pesan"
+id="pesanLogin">
+</div>
+
+</div>
+
+
+<!-- =========================
+HALAMAN ABSENSI
+========================= -->
+
+<div
+class="card"
+id="halamanAbsensi">
+
+<h1>
+ABSENSI PPNPN IMIMOF
+</h1>
+
+<div
+class="tanggal"
+id="tanggal">
+</div>
+
+
+<!-- NAMA -->
+
+<label>
+Nama Lengkap
+</label>
+
+<input
+type="text"
+id="nama"
+placeholder="Masukkan nama lengkap">
+
+
+<!-- STATUS -->
+
+<label>
+Status Kehadiran
+</label>
+
+<select
+id="status"
+onchange="ubahStatus()">
+
+<option value="">
+-- Pilih Status --
+</option>
+
+<option value="Hadir">
+Hadir
+</option>
+
+<option value="Sakit">
+Sakit
+</option>
+
+<option value="Izin">
+Izin
+</option>
+
+<option value="Libur">
+Libur
+</option>
+
+</select>
+
+
+<!-- KETERANGAN -->
+
+<div id="keteranganBox">
+
+<label id="judulKeterangan">
+Keterangan
+</label>
+
+<textarea
+id="keterangan"
+placeholder="">
+</textarea>
+
+</div>
+
+
+<!-- FOTO DOKTER -->
+
+<div id="fotoBox">
+
+<label>
+Foto Keterangan Dokter (Opsional)
+</label>
+
+<input
+type="file"
+id="fotoDokter"
+accept="image/*">
+
+<div id="namaFile"></div>
+
+<img
+id="previewFoto"
+alt="Preview Foto">
+
+<p style="font-size:13px;text-align:center;color:#666;">
+Foto dokter opsional. Foto dapat dilihat sebelum absen.
+</p>
+
+</div>
+
+
+<!-- TOMBOL ABSEN -->
+
+<button
+id="tombolAbsen"
+onclick="absen()">
+
+ABSEN
+
+</button>
+
+<div
+class="pesan"
+id="pesanAbsen">
+</div>
+
+
+<!-- =========================
+HASIL ABSENSI
+========================= -->
+
+<div id="hasilBox">
+
+<div class="box">
+
+<p>
+<b>Nama:</b>
+<span id="hasilNama"></span>
+</p>
+
+<p>
+<b>Status:</b>
+<span id="hasilStatus"></span>
+</p>
+
+<p>
+<b>Keterangan:</b>
+<span id="hasilKeterangan"></span>
+</p>
+
+
+<!-- JAM MASUK -->
+
+<div id="jamMasukBox">
+
+<p>
+<b>Jam Masuk</b>
+</p>
+
+<div class="jam"
+id="jamMasuk">
+-
+</div>
+
+<p class="lokasi">
+
+<b>Lokasi Masuk:</b>
+
+<span id="lokasiMasuk">
+Mengambil lokasi...
+</span>
+
+</p>
+
+</div>
+
+
+<!-- FOTO HASIL -->
+
+<div id="fotoHasilBox">
+
+<p>
+<b>Foto Keterangan Dokter:</b>
+</p>
+
+<img
+id="fotoHasil"
+alt="Foto Dokter">
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+ABSEN PULANG
+========================= -->
+
+<div id="pulangBox">
+
+<h2>
+ABSEN PULANG
+</h2>
+
+<button
+class="btn-pulang"
+id="tombolPulang"
+onclick="absenPulang()">
+
+ABSEN PULANG
+
+</button>
+
+<div
+class="pesan"
+id="pesanPulang">
+</div>
+
+
+<div
+class="box"
+id="jamPulangBox">
+
+<p>
+<b>Jam Pulang</b>
+</p>
+
+<div
+class="jam"
+id="jamPulang">
+-
+</div>
+
+<p class="lokasi">
+
+<b>Lokasi Pulang:</b>
+
+<span id="lokasiPulang">
+Mengambil lokasi...
+</span>
+
+</p>
+
+</div>
+
+</div>
+
+
+<!-- LOGOUT -->
+
+<button
+class="btn-logout"
+onclick="logout()">
+
+LOGOUT
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+MODAL FOTO
+========================= -->
+
+<div id="modal">
+
+<span id="tutup">
+&times;
+</span>
+
+<img
+id="fotoBesar">
+
+</div>
+
+
+<script>
+
+/* =========================
+LOGIN
+========================= */
+
+function login() {
+
+    var username =
+    document.getElementById("username").value;
+
+    var password =
+    document.getElementById("password").value;
+
+    if (
+        username === "admin" &&
+        password === "12345"
+    ) {
+
+        document.getElementById(
+            "halamanLogin"
+        ).style.display = "none";
+
+        document.getElementById(
+            "halamanAbsensi"
+        ).style.display = "block";
+
+        tampilkanTanggal();
+
+    } else {
+
+        document.getElementById(
+            "pesanLogin"
+        ).innerText =
+        "Username atau password salah.";
+
+    }
+
+}
+
+
+/* =========================
+TANGGAL
+========================= */
+
+function tampilkanTanggal() {
+
+    var tanggal = new Date();
+
+    document.getElementById(
+        "tanggal"
+    ).innerText =
+    tanggal.toLocaleDateString(
+        "id-ID",
+        {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================
+UBAH STATUS
+========================= */
+
+function ubahStatus() {
+
+    var status =
+    document.getElementById(
+        "status"
+    ).value;
+
+    var keteranganBox =
+    document.getElementById(
+        "keteranganBox"
+    );
+
+    var fotoBox =
+    document.getElementById(
+        "fotoBox"
+    );
+
+    var judul =
+    document.getElementById(
+        "judulKeterangan"
+    );
+
+    var keterangan =
+    document.getElementById(
+        "keterangan"
+    );
+
+
+    /* RESET */
+
+    keteranganBox.style.display =
+    "none";
+
+    fotoBox.style.display =
+    "none";
+
+    keterangan.value =
+    "";
+
+    document.getElementById(
+        "fotoDokter"
+    ).value =
+    "";
+
+    document.getElementById(
+        "previewFoto"
+    ).style.display =
+    "none";
+
+
+    /* SAKIT */
+
+    if (status === "Sakit") {
+
+        keteranganBox.style.display =
+        "block";
+
+        fotoBox.style.display =
+        "block";
+
+        judul.innerText =
+        "Keterangan Sakit";
+
+        keterangan.placeholder =
+        "Masukkan keterangan sakit";
+
+    }
+
+
+    /* IZIN */
+
+    if (status === "Izin") {
+
+        keteranganBox.style.display =
+        "block";
+
+        judul.innerText =
+        "Keterangan Izin";
+
+        keterangan.placeholder =
+        "Masukkan keterangan izin";
+
+    }
+
+}
+
+
+/* =========================
+PREVIEW FOTO
+========================= */
+
+document.getElementById(
+    "fotoDokter"
+).addEventListener(
+    "change",
+    function() {
+
+        var file =
+        this.files[0];
+
+        var preview =
+        document.getElementById(
+            "previewFoto"
+        );
+
+        var namaFile =
+        document.getElementById(
+            "namaFile"
+        );
+
+
+        if (!file) {
+
+            preview.style.display =
+            "none";
+
+            namaFile.innerText =
+            "";
+
+            return;
+
+        }
+
+
+        namaFile.innerText =
+        "File: " + file.name;
+
+
+        var reader =
+        new FileReader();
+
+
+        reader.onload =
+        function(e) {
+
+            preview.src =
+            e.target.result;
+
+            preview.style.display =
+            "block";
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    }
+);
+
+
+/* =========================
+JAM SEKARANG
+========================= */
+
+function jamSekarang() {
+
+    var sekarang =
+    new Date();
+
+    return sekarang.toLocaleTimeString(
+        "id-ID",
+        {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        }
+    );
+
+}
+
+
+/* =========================
+ABSEN
+========================= */
+
+function absen() {
+
+    var nama =
+    document.getElementById(
+        "nama"
+    ).value.trim();
+
+    var status =
+    document.getElementById(
+        "status"
+    ).value;
+
+    var keterangan =
+    document.getElementById(
+        "keterangan"
+    ).value.trim();
+
+
+    var pesan =
+    document.getElementById(
+        "pesanAbsen"
+    );
+
+
+    /* CEK NAMA */
+
+    if (nama === "") {
+
+        pesan.innerText =
+        "Nama lengkap wajib diisi.";
+
+        return;
+
+    }
+
+
+    /* CEK STATUS */
+
+    if (status === "") {
+
+        pesan.innerText =
+        "Silakan pilih status kehadiran.";
+
+        return;
+
+    }
+
+
+    /* CEK KETERANGAN */
+
+    if (
+        (status === "Sakit" ||
+        status === "Izin") &&
+        keterangan === ""
+    ) {
+
+        pesan.innerText =
+        "Keterangan wajib diisi.";
+
+        return;
+
+    }
+
+
+    /* TAMPILKAN DATA */
+
+    document.getElementById(
+        "hasilBox"
+    ).style.display =
+    "block";
+
+
+    document.getElementById(
+        "hasilNama"
+    ).innerText =
+    nama;
+
+
+    document.getElementById(
+        "hasilStatus"
+    ).innerText =
+    status;
+
+
+    document.getElementById(
+        "hasilKeterangan"
+    ).innerText =
+    keterangan || "-";
+
+
+    /* =========================
+    HADIR
+    ========================= */
+
+    if (status === "Hadir") {
+
+        var jam =
+        jamSekarang();
+
+
+        document.getElementById(
+            "jamMasuk"
+        ).innerText =
+        jam;
+
+
+        document.getElementById(
+            "jamMasukBox"
+        ).style.display =
+        "block";
+
+
+        document.getElementById(
+            "pulangBox"
+        ).style.display =
+        "block";
+
+
+        ambilLokasiMasuk();
+
+    }
+
+
+    /* =========================
+    SAKIT
+    ========================= */
+
+    else if (status === "Sakit") {
+
+        document.getElementById(
+            "jamMasukBox"
+        ).style.display =
+        "none";
+
+
+        document.getElementById(
+            "pulangBox"
+        ).style.display =
+        "none";
+
+
+        tampilkanFotoHasil();
+
+    }
+
+
+    /* =========================
+    IZIN
+    ========================= */
+
+    else if (status === "Izin") {
+
+        document.getElementById(
+            "jamMasukBox"
+        ).style.display =
+        "none";
+
+
+        document.getElementById(
+            "pulangBox"
+        ).style.display =
+        "none";
+
+
+        document.getElementById(
+            "fotoHasilBox"
+        ).style.display =
+        "none";
+
+    }
+
+
+    /* =========================
+    LIBUR
+    ========================= */
+
+    else if (status === "Libur") {
+
+        document.getElementById(
+            "jamMasukBox"
+        ).style.display =
+        "none";
+
+
+        document.getElementById(
+            "pulangBox"
+        ).style.display =
+        "none";
+
+
+        document.getElementById(
+            "fotoHasilBox"
+        ).style.display =
+        "none";
+
+    }
+
+
+    /* ABSEN SELESAI */
+
+    document.getElementById(
+        "tombolAbsen"
+    ).disabled =
+    true;
+
+
+    document.getElementById(
+        "tombolAbsen"
+    ).innerText =
+    "ABSEN SUDAH DILAKUKAN";
+
+
+    pesan.innerText =
+    "Data absensi berhasil dicatat.";
+
+}
+
+
+/* =========================
+TAMPILKAN FOTO HASIL
+========================= */
+
+function tampilkanFotoHasil() {
+
+    var file =
+    document.getElementById(
+        "fotoDokter"
+    ).files[0];
+
+
+    if (!file) {
+
+        document.getElementById(
+            "fotoHasilBox"
+        ).style.display =
+        "none";
+
+        return;
+
+    }
+
+
+    var reader =
+    new FileReader();
+
+
+    reader.onload =
+    function(e) {
+
+        document.getElementById(
+            "fotoHasil"
+        ).src =
+        e.target.result;
+
+
+        document.getElementById(
+            "fotoHasilBox"
+        ).style.display =
+        "block";
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+/* =========================
+GPS MASUK
+========================= */
+
+function ambilLokasiMasuk() {
+
+    var lokasi =
+    document.getElementById(
+        "lokasiMasuk"
+    );
+
+
+    if (
+        !navigator.geolocation
+    ) {
+
+        lokasi.innerText =
+        "GPS tidak tersedia.";
+
+        return;
+
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(posisi) {
+
+            lokasi.innerText =
+            posisi.coords.latitude +
+            ", " +
+            posisi.coords.longitude;
+
+        },
+
+        function() {
+
+            lokasi.innerText =
+            "Lokasi tidak dapat diambil.";
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+
+    );
+
+}
+
+
+/* =========================
+ABSEN PULANG
+========================= */
+
+function absenPulang() {
+
+    var jam =
+    jamSekarang();
+
+
+    document.getElementById(
+        "jamPulang"
+    ).innerText =
+    jam;
+
+
+    document.getElementById(
+        "jamPulangBox"
+    ).style.display =
+    "block";
+
+
+    document.getElementById(
+        "tombolPulang"
+    ).disabled =
+    true;
+
+
+    document.getElementById(
+        "tombolPulang"
+    ).innerText =
+    "ABSEN PULANG SUDAH DILAKUKAN";
+
+
+    document.getElementById(
+        "pesanPulang"
+    ).innerText =
+    "Absen pulang berhasil dicatat.";
+
+
+    ambilLokasiPulang();
+
+}
+
+
+/* =========================
+GPS PULANG
+========================= */
+
+function ambilLokasiPulang() {
+
+    var lokasi =
+    document.getElementById(
+        "lokasiPulang"
+    );
+
+
+    if (
+        !navigator.geolocation
+    ) {
+
+        lokasi.innerText =
+        "GPS tidak tersedia.";
+
+        return;
+
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(posisi) {
+
+            lokasi.innerText =
+            posisi.coords.latitude +
+            ", " +
+            posisi.coords.longitude;
+
+        },
+
+        function() {
+
+            lokasi.innerText =
+            "Lokasi tidak dapat diambil.";
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+
+    );
+
+}
+
+
+/* =========================
+BUKA FOTO BESAR
+========================= */
+
+function bukaFoto(src) {
+
+    document.getElementById(
+        "fotoBesar"
+    ).src =
+    src;
+
+
+    document.getElementById(
+        "modal"
+    ).style.display =
+    "flex";
+
+}
+
+
+/* FOTO PREVIEW */
+
+document.getElementById(
+    "previewFoto"
+).onclick =
+function() {
+
+    bukaFoto(
+        this.src
+    );
+
+};
+
+
+/* FOTO HASIL */
+
+document.getElementById(
+    "fotoHasil"
+).onclick =
+function() {
+
+    bukaFoto(
+        this.src
+    );
+
+};
+
+
+/* TUTUP FOTO */
+
+document.getElementById(
+    "tutup"
+).onclick =
+function() {
+
+    document.getElementById(
+        "modal"
+    ).style.display =
+    "none";
+
+};
+
+
+/* =========================
+LOGOUT
+========================= */
+
+function logout() {
+
+    location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
